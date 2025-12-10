@@ -1,7 +1,8 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, MessageHandler, filters
 import config
-from extraction import extract_reel
+from summary import summarize_reel
+from extraction import download_reel, convert_reel_to_audio, convert_audio_to_text
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
@@ -13,8 +14,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     if ("instagram.com" not in message_text):
         await update.message.reply_text("Please share an Instagram reel.")
     else:
-        if (extract_reel(message_text)):
-            await update.message.reply_text("Instagram reel extracted successfully.")
+        if (download_reel(message_text) and convert_reel_to_audio()):
+            reel_text = convert_audio_to_text()
+            if (reel_text != False):
+                response = summarize_reel(reel_text)
+                await update.message.reply_text("Instagram reel extracted successfully.")
+                await update.message.reply_text(response)
+            else:
+                await update.message.reply_text("Instagram reel could not be extracted.")
         else:
             await update.message.reply_text("Instagram reel could not be extracted.")
 

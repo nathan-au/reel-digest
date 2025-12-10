@@ -1,3 +1,4 @@
+annotated-types==0.7.0
 anyio==4.12.0
 audioop-lts==0.2.2
 certifi==2025.11.12
@@ -10,13 +11,17 @@ ImageIO==2.37.2
 imageio-ffmpeg==0.6.0
 moviepy==2.2.1
 numpy==2.3.5
+ollama==0.6.1
 pillow==11.3.0
 proglog==0.1.12
+pydantic==2.12.5
+pydantic_core==2.41.5
 python-dotenv==1.2.1
 python-telegram-bot==22.5
 SpeechRecognition==3.14.4
 standard-aifc==3.13.0
 standard-chunk==3.13.0
 tqdm==4.67.1
+typing-inspection==0.4.2
 typing_extensions==4.15.0
 yt-dlp==2025.12.8

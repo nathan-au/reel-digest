@@ -30,12 +30,7 @@ def convert_audio_to_text():
         reel_audio_data = AudioData.from_file("bucket/reel.wav")
         r = Recognizer()
         reel_text = r.recognize_google(reel_audio_data)
-        print(reel_text + "\n")
-        return True
+        print("Audio had been converted to text.")
+        return reel_text
     except Exception:
         return False
-
-def extract_reel(reel_url):
-    if (download_reel(reel_url) and convert_reel_to_audio() and convert_audio_to_text()):
-        return True
-    return False
