@@ -3,3 +3,4 @@ config.py
 __pycache__
 bucket
 .DS_Store
+database.db

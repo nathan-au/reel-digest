@@ -1,8 +1,10 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, MessageHandler, filters
 import config
-from summarization import summarize_reel
-from extraction import download_reel, convert_reel_to_audio, convert_audio_to_text
+from verification import verify_message, clean_url
+from process import process_reel
+from database import insert_user, insert_user_reel
+import json
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
@@ -10,26 +12,29 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message_text = update.message.text
+    message_user = update.message.from_user
 
-    if ("instagram.com" not in message_text):
-        await update.message.reply_text("Please share an Instagram reel.")
-    else:
-        clean_url = message_text.split("?")[0]
-        print("\nReceived: " + clean_url)
-        if (download_reel(clean_url) and convert_reel_to_audio()):
-            reel_text = convert_audio_to_text()
-            if (reel_text != False):
-                response = summarize_reel()
-                print("\r[3/4] Generating summary...", end = "", flush = True)
-                print("\r[4/4] Process completed.    ")
-                await update.message.reply_text(response)
-            else:
-                print("Reel could not be processed.\n")
-                await update.message.reply_text("Instagram reel could not be processed.")
+    insert_user(message_user.id, message_user.first_name)
 
-        else:
-            print("Reel could not be processed.\n")
-            await update.message.reply_text("Instagram reel could not be processed.")
+    if (not verify_message(message_text)):
+        await update.message.reply_text("Please share an Instagram Reel.")
+        return
+    
+    clean_reel_url = clean_url(message_text)
+    
+    if (not process_reel(clean_reel_url)):
+        await update.message.reply_text("Instagram Reel could not be processed.")
+        return
+    
+    with open("bucket/info.json", "r") as f:
+        info = json.load(f)
+
+    insert_user_reel(message_user.id, info.get("id"))
+
+    with open("bucket/summary.txt", "r") as f:
+        reel_summary = f.read()
+    await update.message.reply_text(reel_summary)
+
 
 def initialize_bot():
     bot = ApplicationBuilder().token(config.REEL_DIGEST_BOT_TOKEN).build()

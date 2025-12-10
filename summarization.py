@@ -1,8 +1,7 @@
 from ollama import generate
 
 def summarize_reel():
-    print("\r[3/4] Generating summary... ", end = "", flush = True)
-    with open("bucket/reel.txt") as f:
+    with open("bucket/reel.txt", "r") as f:
         reel_text = f.read()
 
     response = generate(
@@ -10,4 +9,7 @@ def summarize_reel():
         prompt = "Summarize this Instagram reel: " + reel_text
     )
 
-    return response.get("response")
+    with open("bucket/summary.txt", "w") as f:
+        f.write(response.get("response"))
+
+    return True
