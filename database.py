@@ -77,7 +77,13 @@ def select_all_user_reels():
         print(user_reel)
     connection.close()
 
-# initialize_database()
-select_all_reels()
-select_all_users()
-select_all_user_reels()
+def select_user_reels(user_id):
+    connection, cursor = connect_to_database()
+    cursor.execute("SELECT * FROM user_reels WHERE user_id = ?", (user_id,))
+    user_reels = cursor.fetchall()
+    connection.close()
+    return user_reels
+
+
+if __name__ == "__main__":
+    initialize_database()

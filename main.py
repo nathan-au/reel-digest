@@ -1,3 +1,6 @@
 from bot import initialize_bot
+from database import initialize_database
 
-initialize_bot()
+if __name__ == "__main__":
+    initialize_database()
+    initialize_bot()
