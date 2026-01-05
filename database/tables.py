@@ -1,4 +1,4 @@
-from database import connect_to_database
+from database.database import connect_to_database
 
 def create_users_table():
     connection, cursor = connect_to_database()
@@ -17,3 +17,11 @@ def create_user_reels_table():
     cursor.execute("CREATE TABLE IF NOT EXISTS user_reels (user_id INTEGER, reel_id TEXT, PRIMARY KEY (user_id, reel_id), FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (reel_id) REFERENCES reels(id))")
     connection.commit()
     connection.close()
+
+def initialize_tables():
+    create_users_table()
+    create_reels_table()
+    create_user_reels_table()
+
+if __name__ == "__main__":
+    initialize_tables()
