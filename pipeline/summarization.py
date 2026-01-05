@@ -32,6 +32,5 @@ def summarize_reel():
 
     return True
 
-
 if __name__ == "__main__":
     summarize_reel()

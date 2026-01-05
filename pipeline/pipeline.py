@@ -1,7 +1,7 @@
-from extraction import download_reel, convert_reel_to_audio, convert_audio_to_text, get_reel_info
-from summarization import summarize_reel
-from database import insert_reel
-import json
+from pipeline.extraction import download_reel, convert_reel_to_audio, convert_audio_to_text, get_reel_info
+from pipeline.summarization import summarize_reel
+from database.queries import insert_reel
+from json import load
 
 def process_reel(reel_url):
     print("\nReceived: " + reel_url)
@@ -16,7 +16,7 @@ def process_reel(reel_url):
                     print("\r[4/4] Process completed.    ")
                     if (get_reel_info(reel_url)):
                         with open("bucket/info.json", "r") as f:
-                            info = json.load(f)
+                            info = load(f)
 
                         insert_reel(info.get("id"), info.get("url"), info.get("extractor_key"), info.get("duration"), info.get("thumbnail"), info.get("transcript"), info.get("summary"))
                         

@@ -1,8 +1,7 @@
 from yt_dlp import YoutubeDL
 from moviepy import VideoFileClip
 from speech_recognition import AudioData, Recognizer
-import json
-
+from json import dump
 def download_reel(reel_url):
     ydl_opts = {
         "outtmpl": "bucket/reel.mp4",
@@ -69,7 +68,7 @@ def get_reel_info(reel_url):
             }
 
         with open("bucket/info.json", "w") as f:
-            json.dump(reel_info_json, f, indent = 4)
+            dump(reel_info_json, f, indent = 4)
     except Exception:
         return False
 

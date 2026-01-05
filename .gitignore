@@ -1,6 +1,6 @@
-.venv
-config.py
-__pycache__
-bucket
 .DS_Store
-database.db
+__pycache__
+.venv
+bucket
+database/storage.db
+core/config.py

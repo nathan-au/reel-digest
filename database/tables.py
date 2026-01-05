@@ -1,0 +1,19 @@
+from database import connect_to_database
+
+def create_users_table():
+    connection, cursor = connect_to_database()
+    cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, first_name TEXT)")
+    connection.commit()
+    connection.close()
+
+def create_reels_table():
+    connection, cursor = connect_to_database()
+    cursor.execute("CREATE TABLE IF NOT EXISTS reels (id TEXT PRIMARY KEY, url TEXT, extractor_key TEXT, duration REAL, thumbnail TEXT, transcript TEXT, summary TEXT)")   
+    connection.commit()
+    connection.close()
+
+def create_user_reels_table():
+    connection, cursor = connect_to_database()
+    cursor.execute("CREATE TABLE IF NOT EXISTS user_reels (user_id INTEGER, reel_id TEXT, PRIMARY KEY (user_id, reel_id), FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (reel_id) REFERENCES reels(id))")
+    connection.commit()
+    connection.close()

@@ -1,19 +1,19 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, MessageHandler, filters
-import config
-from verification import verify_message, clean_url
-from process import process_reel
-from database import insert_user, insert_user_reel, select_user_reels
+from core.config import REEL_DIGEST_BOT_TOKEN
+from pipeline.verification import verify_message, clean_url
+from pipeline.pipeline import process_reel
+from database.queries import insert_user, insert_user_reel, select_user_reels
 import json
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
-    await update.message.reply_text("Hello " + user.first_name + ", welcome to Reel Digest! Share an Instagram reel with me and I will summarize it for you.")
+    await update.message.reply_text("Hello " + user.first_name + ", Welcome to Reel Digest! Share an Instagram reel with me and I will summarize it for you.")
 
-async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user_id = update.effective_user.id
-    history = select_user_reels(user_id)
-    await update.message.reply_text(str(history))
+# async def history(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+#     user_id = update.effective_user.id
+#     history = select_user_reels(user_id)
+#     await update.message.reply_text(str(history))
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message_text = update.message.text
@@ -28,9 +28,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     clean_reel_url = clean_url(message_text)
     
     if (not process_reel(clean_reel_url)):
-        await update.message.reply_text("Instagram Reel could not be processed.")
+        await update.message.reply_text("Reel could not be processed.")
         return
-    
+
     with open("bucket/info.json", "r") as f:
         info = json.load(f)
 
@@ -42,10 +42,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 
 def initialize_bot():
-    bot = ApplicationBuilder().token(config.REEL_DIGEST_BOT_TOKEN).build()
+    bot = ApplicationBuilder().token(REEL_DIGEST_BOT_TOKEN).build()
     bot.add_handler(CommandHandler("start", start))
-    bot.add_handler(CommandHandler("history", history))
+    # bot.add_handler(CommandHandler("history", history))
 
     bot.add_handler(MessageHandler(filters.ALL, handle_message))
     print("\nReelDigestBot is online at https://t.me/ReelDigestBot")
     bot.run_polling()
+
+if __name__ == "__main__":
+    initialize_bot()
