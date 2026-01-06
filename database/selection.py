@@ -23,7 +23,17 @@ def select_all_user_reels():
 
 def select_user_reels(user_id):
     connection, cursor = connect_to_database()
-    cursor.execute("SELECT * FROM user_reels WHERE user_id = ?", (user_id))
+    cursor.execute(
+        """
+        SELECT reels.url, user_reels.created_at, reels.summary
+        FROM user_reels
+        JOIN reels ON user_reels.reel_id = reels.id
+        WHERE user_reels.user_id = ?
+        ORDER BY user_reels.created_at DESC
+        LIMIT 5
+        """,
+        (user_id,)
+    )
     user_reels = cursor.fetchall()
     connection.close()
     return user_reels

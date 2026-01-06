@@ -18,8 +18,9 @@ def process_reel(reel_url):
     print("\r[4/4] Process complete for <" + reel_url + ">.")
 
     reel_id = get_reel_id(reel_url)
-    if (reel_id == None):
-        return None
-    insert_reel(reel_id, reel_url, reel_summary)
+    if (reel_id != None):
+        insert_reel(reel_id, reel_url, reel_summary)
+    else:
+        print("Reel could not be saved.")
     
     return reel_summary
