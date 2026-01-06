@@ -78,5 +78,19 @@ def print_all_tables():
     
     print("")
 
+from database.database import connect_to_database
+
+def print_total_reels_duration():
+    connection, cursor = connect_to_database()
+    
+    cursor.execute("SELECT SUM(duration) FROM reels")
+    total_duration = cursor.fetchone()[0]
+    connection.close()
+    if (total_duration == None):
+        total_duration = 0
+    print("TOTAL REELS DURATION:")
+    print(str(total_duration) + " seconds")
+
 if __name__ == "__main__":
     print_all_tables()
+    print_total_reels_duration()

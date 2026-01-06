@@ -1,13 +1,13 @@
 from ollama import generate
 
-def generate_summary(reel_text):
+def generate_summary(reel_transcript, reel_description):
     try:
         response = generate(
             model = "granite4",
             prompt = (
-                """
+                f"""
                     You are an expert note-taker and technical explainer. Your job is to carefully process
-                    the following video transcript and create an organized output that captures everything
+                    the following video transcript and description to create an organized output that captures everything
                     mentioned.
 
                     Instructions:
@@ -23,11 +23,11 @@ def generate_summary(reel_text):
                     - If a resource is mentioned as a URL, REMOVE the URL and keep ONLY the resource name.
                     - Output is INVALID if it contains any URL or domain.
 
-                    Transcript:\n
-                """ + reel_text
+                    Transcript: {reel_transcript}\n
+                    Description: {reel_description}
+                """ 
             )
         )
     except Exception:
         return None
-
     return response.get("response")

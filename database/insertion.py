@@ -6,9 +6,9 @@ def insert_user(id, first_name):
     connection.commit()
     connection.close()
 
-def insert_reel(id, url, summary):
+def insert_reel(id, url, summary, duration):
     connection, cursor = connect_to_database()
-    cursor.execute("INSERT OR IGNORE INTO reels (id, url, summary) VALUES (?, ?, ?)", (id, url, summary))
+    cursor.execute("INSERT OR IGNORE INTO reels (id, url, summary, duration) VALUES (?, ?, ?, ?)", (id, url, summary, duration))
     connection.commit()
     connection.close()
 

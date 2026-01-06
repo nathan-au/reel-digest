@@ -25,7 +25,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     
     reel_summary = process_reel(clean_reel_url)
     if (reel_summary == None):
-        await update.message.reply_text("Reel could not be processed. Please try again.")
+        await update.message.reply_text("Reel could not be processed. Please try again later.")
         return
     
     reel_id = get_reel_id(clean_reel_url)

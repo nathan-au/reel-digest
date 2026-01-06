@@ -4,3 +4,4 @@ __pycache__
 bucket
 database/storage.db
 core/config.py
+playground.py

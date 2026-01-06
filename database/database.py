@@ -15,7 +15,7 @@ def create_users_table():
 
 def create_reels_table():
     connection, cursor = connect_to_database()
-    cursor.execute("CREATE TABLE IF NOT EXISTS reels (id TEXT PRIMARY KEY, url TEXT, summary TEXT)")   
+    cursor.execute("CREATE TABLE IF NOT EXISTS reels (id TEXT PRIMARY KEY, url TEXT, summary TEXT, duration REAL)")   
     connection.commit()
     connection.close()
 
