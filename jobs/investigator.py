@@ -1,24 +1,5 @@
 from yt_dlp import YoutubeDL
-from speech_recognition import AudioData, Recognizer
-from core.constants import YDL_OPTS_INFO, YDL_OPTS_DOWNLOAD
-
-def download_audio(reel_url):
-    ydl_opts = YDL_OPTS_DOWNLOAD
-
-    try:
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([reel_url])
-            return True
-    except Exception:
-        return False
-    
-def recognize_speech():
-    try:
-        reel_audio_data = AudioData.from_file("bucket/reel.wav")
-        reel_transcript = Recognizer().recognize_google(reel_audio_data)
-        return reel_transcript
-    except Exception:
-        return None
+from core.constants import YDL_OPTS_INFO
 
 def get_reel_id(reel_url):
     ydl_opts = YDL_OPTS_INFO

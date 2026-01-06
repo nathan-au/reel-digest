@@ -1,11 +1,11 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, MessageHandler, filters
 from core.config import REEL_DIGEST_BOT_TOKEN
-from pipeline.verification import verify_message, clean_url
-from pipeline.pipeline import process_reel
+from jobs.checker import verify_message, clean_url
+from jobs.manager import process_reel
 from database.insertion import insert_user, insert_user_reel
 from database.selection import select_recent
-from pipeline.extraction import get_reel_id
+from jobs.investigator import get_reel_id
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user

@@ -1,5 +1,7 @@
-from pipeline.extraction import download_audio, recognize_speech, get_reel_id, get_reel_duration, get_reel_description
-from pipeline.summarization import generate_summary
+from jobs.extractor import recognize_speech
+from jobs.downloader import download_audio, download_video
+from jobs.summarizer import generate_summary
+from jobs.investigator import get_reel_id, get_reel_duration, get_reel_description
 from database.insertion import insert_reel
 from database.selection import select_saved_summary
 
@@ -12,9 +14,12 @@ def process_reel(reel_url):
             print("[cached] Process complete for <" + reel_url + ">.")
             return saved_reel_summary[0]
 
-    print("[1/4] Downloading audio...", end = "", flush = True)
-    download_status = download_audio(reel_url)
-    if (download_status == False):
+    print("[1/4] Downloading reel...", end = "", flush = True)
+    audio_download_status = download_audio(reel_url)
+    if (audio_download_status == False):
+        return None
+    video_download_status = download_video(reel_url)
+    if (video_download_status == False):
         return None
     
     print("\r[2/4] Extracting content...", end = "", flush = True)
