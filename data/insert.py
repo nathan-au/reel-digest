@@ -1,4 +1,4 @@
-from database.database import connect_to_database
+from data.connect import connect_to_database
 
 def insert_user(id, first_name):
     connection, cursor = connect_to_database()

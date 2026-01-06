@@ -2,8 +2,8 @@ from jobs.extractor import recognize_speech
 from jobs.downloader import download_audio, download_video
 from jobs.summarizer import generate_summary
 from jobs.investigator import get_reel_id, get_reel_duration, get_reel_description
-from database.insertion import insert_reel
-from database.selection import select_saved_summary
+from data.insert import insert_reel
+from data.select import select_saved_summary
 
 def process_reel(reel_url):
 

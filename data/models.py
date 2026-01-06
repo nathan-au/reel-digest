@@ -1,11 +1,4 @@
-from sqlite3 import connect
-from core.constants import DATABASE_PATH
-
-def connect_to_database():
-    connection = connect(DATABASE_PATH)
-    connection.execute("PRAGMA foreign_keys = ON")
-    cursor = connection.cursor()
-    return connection, cursor
+from data.connect import connect_to_database
 
 def create_users_table():
     connection, cursor = connect_to_database()
@@ -25,10 +18,10 @@ def create_user_reels_table():
     connection.commit()
     connection.close()
 
-def initialize_all_tables():
+def initialize_tables():
     create_users_table()
     create_reels_table()
     create_user_reels_table()
 
 if __name__ == "__main__":
-    initialize_all_tables()
+    initialize_tables()

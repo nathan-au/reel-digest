@@ -1,4 +1,5 @@
-DATABASE_PATH = "database/storage.db"
+PATH_TO_DATABASE = "data/storage.db"
+
 YDL_OPTS_INFO = {
     "quiet": True,
     "noplaylist": True,
@@ -6,7 +7,7 @@ YDL_OPTS_INFO = {
 
 YDL_OPTS_AUDIO_DOWNLOAD = {
     "format": "bestaudio/best",
-    "outtmpl": "bucket/reel",
+    "outtmpl": "data/bucket/reel",
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
@@ -18,7 +19,7 @@ YDL_OPTS_AUDIO_DOWNLOAD = {
 }
 
 YDL_OPTS_VIDEO_DOWNLOAD = {
-    "outtmpl": "bucket/reel.mp4",
+    "outtmpl": "data/bucket/reel.mp4",
     "overwrites": True,
     "noplaylist": True,
     "quiet": True,
