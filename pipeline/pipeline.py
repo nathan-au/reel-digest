@@ -1,25 +1,25 @@
-from pipeline.extraction import download_reel, convert_reel_to_audio, convert_audio_to_text, get_reel_info
-from pipeline.summarization import summarize_reel
-from database.queries import insert_reel
-from json import load
+from pipeline.extraction import download_audio, recognize_speech, get_reel_id
+from pipeline.summarization import generate_summary
+from database.insertion import insert_reel
 
 def process_reel(reel_url):
-    print("\nReceived: " + reel_url)
-    print("[0/4] Downloading reel...", end = "", flush = True)
-    if (download_reel(reel_url)):
-        print("\r[1/4] Extracting audio...", end = "", flush = True)
-        if (convert_reel_to_audio()):
-            print("\r[2/4] Transcribing speech...", end = "", flush = True)
-            if (convert_audio_to_text()):
-                print("\r[3/4] Generating summary... ", end = "", flush = True)
-                if (summarize_reel()):
-                    print("\r[4/4] Process completed.    ")
-                    if (get_reel_info(reel_url)):
-                        with open("bucket/info.json", "r") as f:
-                            info = load(f)
+    print("[1/4] Downloading audio...", end = "", flush = True)
+    download_status = download_audio(reel_url)
+    if (download_status == False):
+        return None
+    print("\r[2/4] Recognizing speech...", end = "", flush = True)
+    reel_text = recognize_speech()
+    if (reel_text == None):
+        return None
+    print("\r[3/4] Generating summary...", end = "", flush = True)
+    reel_summary = generate_summary(reel_text)
+    if (reel_summary == None):
+        return None
+    print("\r[4/4] Process complete for <" + reel_url + ">.")
 
-                        insert_reel(info.get("id"), info.get("url"), info.get("extractor_key"), info.get("duration"), info.get("thumbnail"), info.get("transcript"), info.get("summary"))
-                        
-                        return True
-    print("Reel could not be processed.\n")
-    return False
+    reel_id = get_reel_id(reel_url)
+    if (reel_id == None):
+        return None
+    insert_reel(reel_id, reel_url, reel_summary)
+    
+    return reel_summary

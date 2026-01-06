@@ -3,8 +3,7 @@ from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, Messa
 from core.config import REEL_DIGEST_BOT_TOKEN
 from pipeline.verification import verify_message, clean_url
 from pipeline.pipeline import process_reel
-from database.queries import insert_user, insert_user_reel, select_user_reels
-import json
+from database.insertion import insert_user
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
@@ -27,27 +26,19 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     
     clean_reel_url = clean_url(message_text)
     
-    if (not process_reel(clean_reel_url)):
+    reel_summary = process_reel(clean_reel_url)
+    if (reel_summary == None):
         await update.message.reply_text("Reel could not be processed.")
         return
 
-    with open("bucket/info.json", "r") as f:
-        info = json.load(f)
-
-    insert_user_reel(message_user.id, info.get("id"))
-
-    with open("bucket/summary.txt", "r") as f:
-        reel_summary = f.read()
     await update.message.reply_text(reel_summary)
-
 
 def initialize_bot():
     bot = ApplicationBuilder().token(REEL_DIGEST_BOT_TOKEN).build()
     bot.add_handler(CommandHandler("start", start))
-    # bot.add_handler(CommandHandler("history", history))
 
     bot.add_handler(MessageHandler(filters.ALL, handle_message))
-    print("\nReelDigestBot is online at https://t.me/ReelDigestBot")
+    print("\nReelDigestBot is ONLINE at https://t.me/ReelDigestBot\n")
     bot.run_polling()
 
 if __name__ == "__main__":

@@ -1,36 +1,33 @@
 from ollama import generate
 
-def summarize_reel():
-    with open("bucket/reel.txt", "r") as f:
-        reel_text = f.read()
+def generate_summary(reel_text):
+    try:
+        response = generate(
+            model = "granite4",
+            prompt = (
+                """
+                    You are an expert note-taker and technical explainer. Your job is to carefully process
+                    the following video transcript and create an organized output that captures everything
+                    mentioned.
 
-    # response = generate(
-    #     model = "granite4",
-    #     prompt = "Summarize this Instagram reel: " + reel_text
-    # )
+                    Instructions:
+                    - Title: 10 word summary title for your output.
+                    - Key Takeaways: List the top 5 insights from the transcript concisely.
+                    - Extra Resources: List any books, papers, tools, or websites the speaker references.
+                    - Next Steps: Based strictly on the content of the transcript, infer exactly 3 practical actions a viewer could take to apply the ideas. Present these as a numbered list. Do not introduce new concepts not implied by the transcript.
 
-    response = generate(
-        model = "granite4",
-        prompt = (
-            """
-                You are an expert note-taker and technical explainer. Your job is to carefully process
-                the following video transcript and create an organized output that captures everything
-                mentioned, without omitting anything.
+                    - Do not use markdown-style formatting. 
+                    - Plain text only.
+                    - Do not reference the video, transcript, or speaker.
+                    - NEVER output URLs, hyperlinks, domains, or protocol strings (http, https, www).
+                    - If a resource is mentioned as a URL, REMOVE the URL and keep ONLY the resource name.
+                    - Output is INVALID if it contains any URL or domain.
 
-                Instructions:
-                - Key Takeaways: List the top 5 insights from the transcript.
-                - Extra Resources Mentioned: List any books, papers, tools, or websites the speaker references.
-                - Next Steps: Based strictly on the content of the transcript, infer exactly 3 practical actions a viewer could take to apply the ideas. Present these as a numbered list. Do not introduce new concepts not implied by the transcript.
-
-                Transcript:\n
-            """ + reel_text
+                    Transcript:\n
+                """ + reel_text
+            )
         )
-    )
+    except Exception:
+        return None
 
-    with open("bucket/summary.txt", "w") as f:
-        f.write(response.get("response"))
-
-    return True
-
-if __name__ == "__main__":
-    summarize_reel()
+    return response.get("response")
