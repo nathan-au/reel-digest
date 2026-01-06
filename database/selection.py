@@ -21,7 +21,7 @@ def select_all_user_reels():
     connection.close()
     return all_user_reels
 
-def select_user_reels(user_id):
+def select_recent(user_id):
     connection, cursor = connect_to_database()
     cursor.execute(
         """
@@ -37,6 +37,15 @@ def select_user_reels(user_id):
     user_reels = cursor.fetchall()
     connection.close()
     return user_reels
+
+def select_saved_summary(reel_id):
+    connection, cursor = connect_to_database()
+    cursor.execute("SELECT summary FROM reels WHERE id = ?", (reel_id,))
+    reel_summary = cursor.fetchall()
+    connection.close()
+    if (reel_summary):
+        return reel_summary[0]
+    return None
 
 def print_all_tables():
     all_users = select_all_users()

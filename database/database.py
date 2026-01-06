@@ -1,7 +1,8 @@
 from sqlite3 import connect
+from core.constants import DATABASE_PATH
 
 def connect_to_database():
-    connection = connect("database/storage.db")
+    connection = connect(DATABASE_PATH)
     connection.execute("PRAGMA foreign_keys = ON")
     cursor = connection.cursor()
     return connection, cursor

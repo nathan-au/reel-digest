@@ -4,7 +4,7 @@ from core.config import REEL_DIGEST_BOT_TOKEN
 from pipeline.verification import verify_message, clean_url
 from pipeline.pipeline import process_reel
 from database.insertion import insert_user, insert_user_reel
-from database.selection import select_user_reels
+from database.selection import select_recent
 from pipeline.extraction import get_reel_id
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -38,7 +38,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 async def recent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.effective_user.id
-    recent = select_user_reels(user_id)
+    recent = select_recent(user_id)
     if (not recent):
         await update.message.reply_text("You haven't summarized any Reels yet!")
         return
@@ -53,7 +53,7 @@ async def recent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Here is the list of available commands:\n\n/start - Displays the welcome message\n/help - Displays this list of commands\n/recent - Displays your 5 most recent Reel summaries"
+        "Here is the list of available commands:\n\n/start - Displays the welcome message\n/help - Displays this list of commands\n/recent - Displays your 5 most recent summaries"
     )
 
 def initialize_bot():
