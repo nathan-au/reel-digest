@@ -13,7 +13,7 @@ YDL_OPTS_AUDIO_DOWNLOAD = {
         "preferredcodec": "wav",
     }],
     "overwrites": True,
-    "noplaylist": True,
+    # "noplaylist": True,
     "quiet": True,
     "noprogress": True,
 }
@@ -21,7 +21,7 @@ YDL_OPTS_AUDIO_DOWNLOAD = {
 YDL_OPTS_VIDEO_DOWNLOAD = {
     "outtmpl": "data/bucket/video.mp4",
     "overwrites": True,
-    "noplaylist": True,
+    # "noplaylist": True,
     "quiet": True,
     "noprogress": True,
 }

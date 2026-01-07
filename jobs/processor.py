@@ -45,7 +45,6 @@ def process_reel(reel_url):
     
     print("\r[4/4] Process complete for <" + reel_url + ">.")
 
-    reel_id = get_reel_id(reel_url)
     if (reel_id != None):
         reel_duration = get_reel_duration(reel_url)
         if (reel_duration == None):
