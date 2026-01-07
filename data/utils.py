@@ -9,7 +9,7 @@ def print_tables():
         cursor.execute("SELECT * FROM " + table)
         rows = cursor.fetchall()
         print(table + " (" + str(len(rows)) + "):")
-        if rows:
+        if (rows):
             for row in rows:
                 print(row)
         else:
@@ -24,7 +24,7 @@ def print_total_duration():
     total_duration = cursor.fetchone()[0]
     connection.close()
 
-    if total_duration is None:
+    if (total_duration == None):
         total_duration = 0
 
     duration_minutes = int(total_duration // 60)
@@ -32,6 +32,6 @@ def print_total_duration():
 
     print("Total Duration: " + str(duration_minutes) + " minutes and " + str(duration_seconds) + " seconds.\n")
 
-if __name__ == "__main__":
+if (__name__ == "__main__"):
     # print_tables()
     print_total_duration()

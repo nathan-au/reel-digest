@@ -22,6 +22,3 @@ def initialize_tables():
     create_users_table()
     create_reels_table()
     create_user_reels_table()
-
-if __name__ == "__main__":
-    initialize_tables()

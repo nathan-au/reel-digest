@@ -1,6 +1,6 @@
 from ollama import generate
 
-def generate_summary(reel_transcript, reel_description):
+def generate_summary(reel_transcript, reel_description, screenshot_text):
     try:
         response = generate(
             model = "granite4",
@@ -24,7 +24,8 @@ def generate_summary(reel_transcript, reel_description):
                     - Output is INVALID if it contains any URL or domain.
 
                     Transcript: {reel_transcript}\n
-                    Description: {reel_description}
+                    Description: {reel_description}\n
+                    Screenshot Text: {screenshot_text}
                 """ 
             )
         )

@@ -1,4 +1,4 @@
-from jobs.extractor import recognize_speech
+from jobs.extractor import recognize_speech, capture_screenshot, recognize_text
 from jobs.downloader import download_audio, download_video
 from jobs.summarizer import generate_summary
 from jobs.investigator import get_reel_id, get_reel_duration, get_reel_description
@@ -29,11 +29,17 @@ def process_reel(reel_url):
     reel_description = get_reel_description(reel_url)
     if (reel_description == None):
         reel_description = ""
-    if (reel_transcript == "" and reel_description == ""):
+    screenshot_capture_status = capture_screenshot()
+    if (screenshot_capture_status):
+        screenshot_text = recognize_text()
+        if (screenshot_text == None):
+            screenshot_text = ""
+
+    if (reel_transcript == "" and reel_description == "" and screenshot_text == ""):
         return None
     
     print("\r[3/4] Generating summary...", end = "", flush = True)
-    reel_summary = generate_summary(reel_transcript, reel_description)
+    reel_summary = generate_summary(reel_transcript, reel_description, screenshot_text)
     if (reel_summary == None):
         return None
     

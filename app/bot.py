@@ -33,16 +33,17 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Here is the list of available commands:\n\n/start - Displays the welcome message\n/help - Displays this list of commands\n/recent - Displays your 5 most recent summaries"
     )
 
+# MESSAGES
+
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message_text = update.message.text
     message_user = update.message.from_user
 
-    insert_user(message_user.id, message_user.first_name)
-
     if (not verify_message(message_text)):
         await update.message.reply_text("Please share an Instagram Reel.")
         return
-    
+    insert_user(message_user.id, message_user.first_name)
+
     clean_reel_url = clean_url(message_text)
     
     reel_summary = process_reel(clean_reel_url)

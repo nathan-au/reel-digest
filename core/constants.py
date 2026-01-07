@@ -7,7 +7,7 @@ YDL_OPTS_INFO = {
 
 YDL_OPTS_AUDIO_DOWNLOAD = {
     "format": "bestaudio/best",
-    "outtmpl": "data/bucket/reel",
+    "outtmpl": "data/bucket/audio",
     "postprocessors": [{
         "key": "FFmpegExtractAudio",
         "preferredcodec": "wav",
@@ -19,7 +19,7 @@ YDL_OPTS_AUDIO_DOWNLOAD = {
 }
 
 YDL_OPTS_VIDEO_DOWNLOAD = {
-    "outtmpl": "data/bucket/reel.mp4",
+    "outtmpl": "data/bucket/video.mp4",
     "overwrites": True,
     "noplaylist": True,
     "quiet": True,
