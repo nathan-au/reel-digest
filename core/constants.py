@@ -3,6 +3,8 @@ PATH_TO_DATABASE = "data/storage.db"
 YDL_OPTS_INFO = {
     "quiet": True,
     "noplaylist": True,
+    "skip_download": True,
+    "no_warnings": True,
 }
 
 YDL_OPTS_AUDIO_DOWNLOAD = {
@@ -16,6 +18,7 @@ YDL_OPTS_AUDIO_DOWNLOAD = {
     # "noplaylist": True,
     "quiet": True,
     "noprogress": True,
+    "no_warnings": True,
 }
 
 YDL_OPTS_VIDEO_DOWNLOAD = {
@@ -24,4 +27,5 @@ YDL_OPTS_VIDEO_DOWNLOAD = {
     # "noplaylist": True,
     "quiet": True,
     "noprogress": True,
+    "no_warnings": True,
 }

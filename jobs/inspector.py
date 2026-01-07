@@ -1,8 +1,8 @@
 from yt_dlp import YoutubeDL
 from core.constants import YDL_OPTS_INFO
 
-def is_instagram(message_text):
-    if ("instagram.com" in message_text):
+def is_valid_platform(message_text):
+    if ("instagram.com" in message_text or "tiktok.com" in message_text or "youtube.com" in message_text):
         return True
     return False
 
@@ -16,7 +16,6 @@ def is_reel(reel_url):
             post_info = ydl.extract_info(reel_url, download = False)
             post_type = post_info.get("_type")
             post_duration = post_info.get("duration")
-        
         if (not post_type and post_duration):
             return True
         return False

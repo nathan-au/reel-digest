@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ApplicationBuilder, CommandHandler, MessageHandler, filters
 from core.config import REEL_DIGEST_BOT_TOKEN
-from jobs.inspector import is_instagram, extract_url, is_reel
+from jobs.inspector import is_valid_platform, extract_url, is_reel
 from jobs.processor import process_reel
 from data.insert import insert_user, insert_user_reel
 from data.select import select_recent
@@ -11,7 +11,7 @@ from jobs.investigator import get_reel_id
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
-    await update.message.reply_text("Hello " + user.first_name + ", Welcome to Reel Digest! Share an Instagram Reel with me and I will summarize it for you.")
+    await update.message.reply_text("Hello " + user.first_name + ", Welcome to Reel Digest! Share an Instagram Reel, YouTube Short, or TikTok video with me and I will summarize it for you.")
 
 async def recent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = update.message.from_user.id
@@ -21,7 +21,7 @@ async def recent(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if (not recent):
         await update.message.reply_text("You haven't summarized any Reels yet!")
         return
-    await update.message.reply_text("Here are your 5 most recent Reel summaries.", reply_to_message_id = message_id
+    await update.message.reply_text("Here are your 5 most recent video summaries.", reply_to_message_id = message_id
 )
 
     for summary in recent:
@@ -43,26 +43,26 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     message_id = update.message.id
 
     if (not message_text):
-        await update.message.reply_text("Please share an Instagram Reel.", reply_to_message_id = message_id)
+        await update.message.reply_text("Please share an Instagram Reel, YouTube Short, or Tiktok video.", reply_to_message_id = message_id)
         return
     
     message_user = update.message.from_user
 
-    if (not is_instagram(message_text)):
-        await update.message.reply_text("Please share an Instagram Reel.", reply_to_message_id = message_id)
+    if (not is_valid_platform(message_text)):
+        await update.message.reply_text("Please share an Instagram Reel, YouTube Short, or Tiktok video.", reply_to_message_id = message_id)
         return
     
     reel_url = extract_url(message_text)
 
     if (not is_reel(reel_url)):
-        await update.message.reply_text("Please share an Instagram Reel.", reply_to_message_id = message_id)
+        await update.message.reply_text("Please share an Instagram Reel, YouTube Short, or Tiktok video.", reply_to_message_id = message_id)
         return
 
     insert_user(message_user.id, message_user.first_name)
     
     reel_summary = process_reel(reel_url)
     if (reel_summary == None):
-        await update.message.reply_text("Reel could not be processed. Please try again later.", reply_to_message_id = message_id)
+        await update.message.reply_text("Video could not be processed. Please try again later.", reply_to_message_id = message_id)
         return
     
     reel_id = get_reel_id(reel_url)
@@ -79,7 +79,7 @@ def initialize_bot():
     bot.add_handler(CommandHandler("start", start))
     bot.add_handler(CommandHandler("recent", recent))
     bot.add_handler(CommandHandler("help", help))
-
     bot.add_handler(MessageHandler(filters.ALL, handle_message))
-    print("\nReelDigestBot is ONLINE at https://t.me/ReelDigestBot\n")
+
+    print("ReelDigestBot is ONLINE at https://t.me/ReelDigestBot")
     bot.run_polling()
